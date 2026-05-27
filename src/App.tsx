@@ -4,6 +4,7 @@ import TranscriptImporter from './components/TranscriptImporter';
 import VideoPlayer from './components/VideoPlayer';
 import TranscriptViewer from './components/TranscriptViewer';
 import StudyNotes from './components/StudyNotes';
+import AiCopilot from './components/AiCopilot';
 import { BookOpen, ChevronLeft, Award, RefreshCw, Calendar, Trash2, Sun, Moon } from 'lucide-react';
 
 export default function App() {
@@ -59,8 +60,8 @@ export default function App() {
     autoScroll: true
   });
 
-  // Tab control in the right-hand companion panel (Video vs. Notebook)
-  const [rightPanelTab, setRightPanelTab] = useState<'video' | 'notes'>('video');
+  // Tab control in the right-hand companion panel (Video vs. Notebook vs. AI Copilot)
+  const [rightPanelTab, setRightPanelTab] = useState<'video' | 'notes' | 'ai'>('video');
 
   // Sync dark mode configuration with body elements and LocalStorage
   useEffect(() => {
@@ -295,28 +296,41 @@ export default function App() {
                 <button
                   id="tab-companion-video"
                   onClick={() => setRightPanelTab('video')}
-                  className={`flex-1 py-1.5 text-xs font-sans font-medium rounded-lg cursor-pointer transition-all ${
+                  className={`flex-1 py-1.5 text-[11px] font-sans font-medium rounded-lg cursor-pointer transition-all ${
                     rightPanelTab === 'video'
                       ? isDarkMode 
                         ? 'bg-[#2a2a2c] text-white shadow-xs' 
-                        : 'bg-white text-neutral-900 shadow-xs'
+                        : 'bg-white text-neutral-905 shadow-xs'
                       : 'text-neutral-500 hover:text-neutral-850 dark:hover:text-neutral-300'
                   }`}
                 >
-                  Video Companion
+                  Video
                 </button>
                 <button
                   id="tab-companion-notes"
                   onClick={() => setRightPanelTab('notes')}
-                  className={`flex-1 py-1.5 text-xs font-sans font-medium rounded-lg cursor-pointer transition-all ${
+                  className={`flex-1 py-1.5 text-[11px] font-sans font-medium rounded-lg cursor-pointer transition-all ${
                     rightPanelTab === 'notes'
                       ? isDarkMode 
                         ? 'bg-[#2a2a2c] text-white shadow-xs' 
-                        : 'bg-white text-neutral-900 shadow-xs'
+                        : 'bg-white text-neutral-905 shadow-xs'
                       : 'text-neutral-500 hover:text-neutral-850 dark:hover:text-neutral-300'
                   }`}
                 >
-                  Notebook Summary ({Object.keys(activeSession.highlights).length})
+                  Notebook ({Object.keys(activeSession.highlights).length})
+                </button>
+                <button
+                  id="tab-companion-ai"
+                  onClick={() => setRightPanelTab('ai')}
+                  className={`flex-1 py-1.5 text-[11px] font-sans font-medium rounded-lg cursor-pointer transition-all ${
+                    rightPanelTab === 'ai'
+                      ? isDarkMode 
+                        ? 'bg-[#2a2a2c] text-white shadow-xs' 
+                        : 'bg-white text-neutral-905 shadow-xs'
+                      : 'text-neutral-505 hover:text-neutral-850 dark:hover:text-neutral-300'
+                  }`}
+                >
+                  ✨ Study Copilot
                 </button>
               </div>
 
@@ -331,13 +345,22 @@ export default function App() {
                     onSpeedChange={setPlaybackSpeed}
                     isDarkMode={isDarkMode}
                   />
-                ) : (
+                ) : rightPanelTab === 'notes' ? (
                   <StudyNotes
                     segments={activeSession.segments}
                     highlights={activeSession.highlights}
                     onSegmentClick={handleSegmentClick}
                     onRemoveHighlight={handleRemoveHighlight}
                     sessionTitle={activeSession.title}
+                    isDarkMode={isDarkMode}
+                  />
+                ) : (
+                  <AiCopilot
+                    segments={activeSession.segments}
+                    highlights={activeSession.highlights}
+                    onSegmentClick={handleSegmentClick}
+                    onAddHighlight={handleAddHighlight}
+                    videoTitle={activeSession.title}
                     isDarkMode={isDarkMode}
                   />
                 )}

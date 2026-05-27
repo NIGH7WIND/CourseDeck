@@ -1,5 +1,5 @@
 {
-  "name": "CourseDeck-Reading First Youtube Wrapper",
+  "name": "CourseDeck",
   "description": "A reading-first study application for YouTube videos that prioritizes a clean, interactive transcript with direct timestamps to jump into the video when needed.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
